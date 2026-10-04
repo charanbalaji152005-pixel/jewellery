@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VÉLANTE • Haute Joaillerie | The Ultimate Collections</title>
+  <meta name="description" content="Discover VÉLANTE Haute Joaillerie. An immersive 3-phase luxury jewelry showcase featuring solitaire diamond rings, royal emerald necklaces, and artisanal fine pieces.">
+
+  <!-- Google Fonts: Cormorant Garamond (Italic headings) & Poppins (UI text) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       0. CSS VARIABLES & SYSTEM TOKENS
+       ========================================================================== */
+    :root {
+      --bg: #9CC5CC;
+      --bg-darker: #88b7bf;
+      --bg-light: #b4d7dc;
+      --text: #1a1a1a;
+      --text-dark: #0d2126;
+      --text-muted: #3a585e;
+      --text-light: #5d7e85;
+      
+      --card-bg: #ffffff;
+      --card-border: rgba(255, 255, 255, 0.7);
+      --card-width: 210px;
+      --card-height: 315px;
+      
+      --gold-primary: #c5a059;
+      --gold-light: #ecd69a;
+      --gold-dark: #967436;
+      --black-btn: #111416;
+      --black-btn-hover: #22272b;
+      
+      --shadow-ambient: 0 20px 40px -10px rgba(18, 44, 49, 0.22);
+      --shadow-elevated: 0 35px 70px -15px rgba(14, 38, 43, 0.35);
+      --shadow-lift: 0 45px 85px -12px rgba(10, 30, 35, 0.45);
+      
+      --ease-luxury: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-card: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      overflow-y: auto;
+      user-select: none;
+      position: relative;
+    }
+
+    /* Ambient Subtle Texture / Lighting Vignette */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.28) 0%, rgba(156, 197, 204, 0) 70%),
+                  radial-gradient(circle at 80% 80%, rgba(136, 183, 191, 0.4) 0%, rgba(156, 197, 204, 0) 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Subtle Animated Sparkle Grid Overlay */
+    .ambient-sparkles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .ambient-sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.9);
+      animation: sparkleFloat 8s infinite ease-in-out;
+    }
+    @keyframes sparkleFloat {
+      0%, 100% { opacity: 0; transform: translateY(0) scale(0.6); }
+      50% { opacity: 0.8; transform: translateY(-25px) scale(1.2); }
+    }
+
+    /* Master Container */
+    #showcaseApp {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+    }
+
+    /* ==========================================================================
+       TOP LUXURY NAVIGATION BAR
+       ========================================================================== */
+    .luxe-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      padding: 0 clamp(20px, 5vw, 60px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
+    }
+    .luxe-nav.scrolled {
+      background-color: rgba(156, 197, 204, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    }
+    .brand-mark {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      color: var(--text-dark);
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .brand-sub {
+      font-size: 9px;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .nav-phase-indicators {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      padding: 6px 14px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 15px rgba(20, 50, 55, 0.08);
+    }
+    .phase-pill {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      padding: 6px 14px;
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.3s var(--ease-luxury);
+    }
+    .phase-pill:hover {
+      color: var(--text-dark);
+      background: rgba(255, 255, 255, 0.6);
+    }
+    .phase-pill.active {
+      color: #ffffff;
+      background: var(--text-dark);
+      box-shadow: 0 4px 12px rgba(13, 33, 38, 0.25);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .nav-action-btn {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      color: var(--text-dark);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(6px);
+      position: relative;
+    }
+    .nav-action-btn:hover {
+      background: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(20, 50, 55, 0.15);
+    }
+    .cart-count-badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background: #111416;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      width: 19px;
+      height: 19px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .cart-count-badge.bump {
+      transform: scale(1.4);
+    }
+
+    /* Main Showcase Stage Area */
+    .showcase-stage {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-top: 80px;
+      perspective: 1400px;
+      perspective-origin: center center;
+    }
+
+    /* ==========================================================================
+       SHARED CARD COMPONENT (3D PRESERVE & LUXURY DETAILS)
+       ========================================================================== */
+    .cards-deck-container {
+      position: relative;
+      width: 100%;
+      max-width: 1550px;
+      height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      margin-top: 15px;
+    }
+
+    .luxe-card {
+      position: absolute;
+      width: var(--card-width);
+      height: var(--card-height);
+      background: var(--card-bg);
+      border-radius: 22px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-ambient);
+      overflow: hidden;
+      cursor: pointer;
+      transform-origin: center bottom;
+      transition: transform 0.65s var(--ease-card), 
+                  box-shadow 0.65s var(--ease-card), 
+                  opacity 0.65s var(--ease-card),
+                  filter 0.65s var(--ease-card);
+      will-change: transform, box-shadow, opacity;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backface-visibility: hidden;
+    }
+
+    /* Card Top Chip */
+    .card-top-chip {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .card-num {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--text-light);
+      background: rgba(255, 255, 255, 0.85);
+      padding: 3px 9px;
+      border-radius: 12px;
+      backdrop-filter: blur(4px);
+    }
+    .card-sparkle-icon {
+      color: var(--gold-primary);
+      font-size: 13px;
+    }
+
+    /* Card Image Viewport */
+    .card-img-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 35px 25px 95px 25px;
+      background: radial-gradient(circle at center 42%, #ffffff 0%, #f4f7f8 85%);
+      overflow: hidden;
+    }
+    .card-img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 22px rgba(18, 40, 45, 0.22));
+      transition: transform 0.7s var(--ease-luxury);
+      mix-blend-mode: multiply;
+    }
+    .luxe-card:hover .card-img {
+      transform: none;
+    }
+
+    /* Card Bottom Dark Gradient Overlay */
+    .card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 50px 20px 22px 20px;
+      background: linear-gradient(to top, 
+        rgba(10, 24, 28, 0.94) 0%, 
+        rgba(10, 24, 28, 0.75) 45%, 
+        rgba(10, 24, 28, 0.35) 75%,
+        rgba(10, 24, 28, 0) 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      z-index: 8;
+      pointer-events: none;
+      backdrop-filter: blur(1px);
+    }
+    .card-product-name {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 600;
+      font-size: 26px;
+      line-height: 1.1;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    .card-product-price {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 17px;
+      color: #bfe5eb;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-product-price .currency {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--gold-light);
+    }
+
+    /* ==========================================================================
+       SECTION 1: .phase-1 (STACKED HERO CARD)
+       ========================================================================== */
+    .phase-1 {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .hero-category-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(8px);
+      padding: 8px 22px;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 6px 20px rgba(18, 48, 54, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.4s ease;
+    }
+    .hero-category-label::before,
+    .hero-category-label::after {
+      content: '✦';
+      font-size: 9px;
+      color: var(--gold-dark);
+    }
+
+    /* Phase 1 Stack Placements */
+    .showcase-stage.is-phase-1 .luxe-card {
+      transition: transform 0.65s var(--ease-card), box-shadow 0.65s var(--ease-card), opacity 0.5s ease;
+    }
+
+    /* Phase 1 Controls (Dots & Navigation) */
+    .phase-1-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      margin-top: 30px;
+      z-index: 20;
+    }
+
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.45);
+      padding: 9px 18px;
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 6px 20px rgba(15, 45, 50, 0.08);
+    }
+
+    .dot-btn {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(18, 48, 54, 0.35);
+      border: none;
+      cursor: pointer;
+      transition: all 0.35s var(--ease-luxury);
+      position: relative;
+    }
+    .dot-btn:hover {
+      background: rgba(18, 48, 54, 0.7);
+      transform: scale(1.2);
+    }
+    .dot-btn.active {
+      width: 32px;
+      border-radius: 10px;
+      background: var(--text-dark);
+      box-shadow: 0 2px 8px rgba(10, 30, 35, 0.3);
+    }
+
+    .stack-arrow-btns {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .stack-nav-btn {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      color: var(--text-dark);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s var(--ease-luxury);
+      box-shadow: 0 4px 14px rgba(20, 50, 55, 0.1);
+    }
+    .stack-nav-btn:hover {
+      background: #ffffff;
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(20, 50, 55, 0.18);
+    }
+
+    .phase-1-cta-btn {
+      margin-top: 10px;
+      background: transparent;
+      border: 1.5px solid var(--text-dark);
+      color: var(--text-dark);
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.35s var(--ease-luxury);
+      box-shadow: 0 4px 15px rgba(20, 50, 55, 0.08);
+    }
+    .phase-1-cta-btn:hover {
+      background: var(--text-dark);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(15, 40, 45, 0.2);
+    }
+    .phase-1-cta-btn .arrow-icon {
+      font-size: 14px;
+      transition: transform 0.3s ease;
+    }
+    .phase-1-cta-btn:hover .arrow-icon {
+      transform: translateY(3px);
+    }
+
+    /* ==========================================================================
+       SECTION 2: .spread-header, .spread-sub & .spread-title
+       ========================================================================== */
+    .spread-header {
+      position: absolute;
+      top: 95px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 15;
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s var(--ease-luxury);
+    }
+
+    .spread-sub {
+      font-family: var(--font-sans);
+      font-size: clamp(12px, 1.2vw, 15px);
+      font-weight: 600;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .spread-sub::before,
+    .spread-sub::after {
+      content: '';
+      display: inline-block;
+      width: 25px;
+      height: 1px;
+      background: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    .spread-title {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: clamp(40px, 7vw, 80px);
+      line-height: 1.05;
+      letter-spacing: 0.03em;
+      color: var(--text-dark);
+      text-shadow: 0 4px 20px rgba(255, 255, 255, 0.4);
+    }
+
+    /* ==========================================================================
+       SECTION 3: .phase-2 ("The Ultimate COLLECTIONS" SPREAD)
+       ========================================================================== */
+    .phase-2 {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .phase-2-hint {
+      position: absolute;
+      bottom: 25px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      z-index: 25;
+      pointer-events: none;
+      animation: pulseHint 2.4s infinite ease-in-out;
+    }
+    .phase-2-hint .hint-sparkle {
+      color: var(--gold-dark);
+      font-size: 14px;
+    }
+    @keyframes pulseHint {
+      0%, 100% { opacity: 0.65; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    /* Phase 2 Card Hover Straighten & Lift (Handled smoothly via JS/GSAP preserving position & scale) */
+    .showcase-stage.is-phase-2 .luxe-card {
+      cursor: pointer;
+    }
+
+    /* Return button to Stack view from Spread */
+    .return-to-stack-btn {
+      position: absolute;
+      top: 110px;
+      left: clamp(20px, 4vw, 50px);
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      color: var(--text-dark);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+      z-index: 90;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(18, 48, 54, 0.08);
+    }
+    .return-to-stack-btn:hover {
+      background: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(18, 48, 54, 0.15);
+    }
+
+    /* ==========================================================================
+       SECTION 4: .phase-3 (PRODUCT DETAIL VIEW)
+       ========================================================================== */
+    .phase-3-panel {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 90px clamp(20px, 6vw, 90px) 40px clamp(20px, 6vw, 90px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 50;
+    }
+    .showcase-stage.is-phase-3 .phase-3-panel {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Left stage anchor for the flying hero card & stacked cards behind */
+    .phase-3-left-stage {
+      position: relative;
+      width: 45%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1200px;
+    }
+
+    /* Right detail content container */
+    .phase-3-details {
+      width: 48%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 22px;
+      transform: translateX(40px);
+      opacity: 0;
+      transition: transform 0.65s var(--ease-luxury), opacity 0.65s ease;
+      padding-left: 20px;
+    }
+    .showcase-stage.is-phase-3 .phase-3-details {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* Dark Back Button at Top Left */
+    .back-btn {
+      position: fixed;
+      top: 100px;
+      left: clamp(20px, 5vw, 60px);
+      background: #111416;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 120;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      transition: all 0.35s var(--ease-luxury);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+    }
+    .showcase-stage.is-phase-3 .back-btn {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    .back-btn:hover {
+      background: #252b30;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+    }
+    .back-btn .back-arrow {
+      font-size: 15px;
+      transition: transform 0.25s ease;
+    }
+    .back-btn:hover .back-arrow {
+      transform: translateX(-4px);
+    }
+
+    .detail-title {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 600;
+      font-size: clamp(38px, 4.8vw, 62px);
+      line-height: 1.08;
+      color: var(--text-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .detail-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+    .detail-price {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: clamp(32px, 3.6vw, 44px);
+      color: var(--text-dark);
+      letter-spacing: 0.02em;
+    }
+    .detail-rating {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .detail-stars {
+      color: #b8860b;
+      letter-spacing: 2px;
+      font-size: 13px;
+    }
+
+    .detail-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      opacity: 0.9;
+      max-width: 500px;
+    }
+
+    /* Specs Grid */
+    .detail-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 8px 0;
+    }
+    .spec-item {
+      background: rgba(255, 255, 255, 0.4);
+      padding: 10px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .spec-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+    .spec-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    /* Ring / Customization Size Selector */
+    .size-selector-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .size-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .size-options {
+      display: flex;
+      gap: 8px;
+    }
+    .size-opt-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.5);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .size-opt-btn:hover {
+      background: #ffffff;
+      transform: translateY(-2px);
+    }
+    .size-opt-btn.active {
+      background: var(--text-dark);
+      color: #ffffff;
+      border-color: var(--text-dark);
+    }
+
+    /* BLACK ADD TO CART BUTTON */
+    .add-to-cart-btn {
+      background: var(--black-btn);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 14px;
+      padding: 18px 36px;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 16px 36px rgba(10, 24, 28, 0.35);
+      transition: all 0.35s var(--ease-luxury);
+      position: relative;
+      overflow: hidden;
+    }
+    .add-to-cart-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.7s ease;
+    }
+    .add-to-cart-btn:hover {
+      background: var(--black-btn-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 42px rgba(10, 24, 28, 0.45);
+    }
+    .add-to-cart-btn:hover::before {
+      left: 100%;
+    }
+    .add-to-cart-btn.added {
+      background: #14532d;
+      border-color: #22c55e;
+      color: #f0fdf4;
+    }
+    .add-to-cart-btn .cart-icon {
+      font-size: 16px;
+    }
+
+    /* Detail Footer Badges */
+    .detail-trust-badges {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .trust-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Detail Prev / Next Switchers */
+    .detail-carousel-nav {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 4px;
+      width: 100%;
+      max-width: 440px;
+    }
+    .detail-nav-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dark);
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(18, 48, 54, 0.08);
+      transition: all 0.3s var(--ease-luxury);
+    }
+    .detail-nav-btn:hover {
+      background: #ffffff;
+      border-color: #ffffff;
+      color: var(--text-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(18, 48, 54, 0.16);
+    }
+    .detail-nav-btn:active {
+      transform: translateY(0);
+    }
+    .detail-nav-btn .nav-arrow {
+      font-size: 14px;
+      transition: transform 0.25s ease;
+    }
+    .detail-nav-btn:first-child:hover .nav-arrow {
+      transform: translateX(-3px);
+    }
+    .detail-nav-btn:last-child:hover .nav-arrow {
+      transform: translateX(3px);
+    }
+
+    /* ==========================================================================
+       CART TOAST NOTIFICATION
+       ========================================================================== */
+    .cart-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #111416;
+      color: #ffffff;
+      padding: 16px 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 200;
+      transform: translateY(120px);
+      opacity: 0;
+      transition: transform 0.4s var(--ease-spring), opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .cart-toast.visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+    .toast-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: #fff;
+      object-fit: contain;
+      padding: 2px;
+    }
+    .toast-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .toast-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .toast-sub {
+      font-size: 11px;
+      color: #88b7bf;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE MEDIA QUERIES
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      :root {
+        --card-width: 240px;
+        --card-height: 350px;
+      }
+      .spread-header {
+        top: 85px;
+      }
+      .phase-3-panel {
+        flex-direction: column;
+        justify-content: flex-start;
+        overflow-y: auto;
+        padding-top: 110px;
+      }
+      .phase-3-left-stage {
+        width: 100%;
+        height: 380px;
+        margin-bottom: 20px;
+      }
+      .phase-3-details {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --card-width: 220px;
+        --card-height: 320px;
+      }
+      .luxe-nav {
+        height: 70px;
+        padding: 0 20px;
+      }
+      .nav-phase-indicators {
+        display: none; /* Keep clean on small screens */
+      }
+      .brand-title {
+        font-size: 18px;
+      }
+      .hero-category-label {
+        font-size: 9px;
+        letter-spacing: 0.3em;
+        padding: 6px 16px;
+      }
+      .card-product-name {
+        font-size: 22px;
+      }
+      .cards-deck-container {
+        height: 440px;
+      }
+      .back-btn {
+        top: 75px;
+        left: 20px;
+        padding: 8px 16px;
+        font-size: 11px;
+      }
+      .detail-specs-grid {
+        grid-template-columns: 1fr;
+      }
+      .detail-title {
+        font-size: 32px;
+      }
+    }
+  </style>
+
+  <!-- GSAP & Canvas-Confetti (Trusted CDN standard delivery) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- Ambient Light Sparkles Background -->
+  <div class="ambient-sparkles" id="ambientSparkles"></div>
+
+  <!-- Master Application Container -->
+  <div id="showcaseApp">
+
+    <!-- Top Luxury Navigation Bar -->
+    <header class="luxe-nav" id="luxeNav">
+      <a href="#" class="brand-mark" id="brandLogo" title="VÉLANTE Haute Joaillerie">
+        <span class="brand-title">VÉLANTE</span>
+        <span class="brand-sub">Haute Joaillerie • Paris & Bombay</span>
+      </a>
+
+      <!-- Quick Phase Navigation Pills -->
+      <nav class="nav-phase-indicators" aria-label="Showcase Phases">
+        <button class="phase-pill active" id="pillPhase1" data-phase="1">Hero Stack</button>
+        <button class="phase-pill" id="pillPhase2" data-phase="2">Spread Arc</button>
+        <button class="phase-pill" id="pillPhase3" data-phase="3">Piece Details</button>
+      </nav>
+
+      <!-- Nav Actions (Bag) -->
+      <div class="nav-actions">
+        <button class="nav-action-btn" id="cartBtn" title="View Luxury Cart" aria-label="Shopping Cart">
+          <span>🛒</span>
+          <span class="cart-count-badge" id="cartCountBadge">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main 3-Phase Interactive Stage -->
+    <main class="showcase-stage is-phase-1" id="showcaseStage">
+
+      <!-- ========================================================
+           PHASE 1 HEADER: Tiny Uppercase Category Label
+           ======================================================== -->
+      <div class="phase-1" id="phase1HeaderSection">
+        <div class="hero-category-label" id="heroCategoryLabel">
+          FINE JEWELLERY • SIGNATURE SELECTIONS
+        </div>
+      </div>
+
+      <!-- ========================================================
+           PHASE 2 SPREAD HEADER: "The Ultimate" + "COLLECTIONS"
+           ======================================================== -->
+      <div class="spread-header" id="spreadHeaderSection" style="opacity: 0; transform: translateY(-20px);">
+        <span class="spread-sub">The Ultimate</span>
+        <h1 class="spread-title">COLLECTIONS</h1>
+      </div>
+
+      <!-- Back to Stack View button when in Spread -->
+      <button class="return-to-stack-btn" id="returnToStackBtn" style="display: none;">
+        <span>↑</span> Stack View
+      </button>
+
+      <!-- Back Button for Phase 3 (Top Left) -->
+      <button class="back-btn" id="backToSpreadBtn">
+        <span class="back-arrow">←</span> Back to Collections
+      </button>
+
+      <!-- ========================================================
+           INTERACTIVE 3D CARDS DECK
+           ======================================================== -->
+      <div class="cards-deck-container" id="cardsDeckContainer" role="region" aria-label="Jewelry Cards Deck">
+        <!-- 7 luxury product cards injected via JS for high precision -->
+      </div>
+
+      <!-- ========================================================
+           PHASE 1 CONTROLS: Pagination Dots & Cycle Controls
+           ======================================================== -->
+      <div class="phase-1-controls" id="phase1Controls">
+        <div class="pagination-bar" id="paginationBar" role="tablist" aria-label="Products Pagination">
+          <!-- 7 pagination dots injected via JS -->
+        </div>
+
+        <div class="stack-arrow-btns">
+          <button class="stack-nav-btn" id="prevCardBtn" aria-label="Previous Piece" title="Previous Piece">←</button>
+          <button class="stack-nav-btn" id="nextCardBtn" aria-label="Next Piece" title="Next Piece">→</button>
+        </div>
+
+        <button class="phase-1-cta-btn" id="fanOutTriggerBtn">
+          <span>Explore All 7 Pieces</span>
+          <span class="arrow-icon">↓</span>
+        </button>
+      </div>
+
+      <!-- ========================================================
+           PHASE 2 HINT: "Click a card to view details"
+           ======================================================== -->
+      <div class="phase-2-hint" id="phase2Hint" style="display: none;">
+        <span class="hint-sparkle">✦</span>
+        <span>Click a card to view details</span>
+        <span class="hint-sparkle">✦</span>
+      </div>
+
+      <!-- ========================================================
+           PHASE 3: PRODUCT DETAIL PANEL (Right side of stage)
+           ======================================================== -->
+      <div class="phase-3-panel" id="phase3Panel">
+        <!-- Left half is empty space reserved for the flying card anchor -->
+        <div class="phase-3-left-stage" id="phase3LeftStage"></div>
+
+        <!-- Right half contains product name, price & Add to Cart -->
+        <div class="phase-3-details" id="phase3Details">
+          <h2 class="detail-title" id="detailTitle">Phantom Edition</h2>
+
+          <div class="detail-price-row">
+            <span class="detail-price" id="detailPrice">₹20,749</span>
+          </div>
+
+          <!-- BLACK ADD TO CART BUTTON -->
+          <button class="add-to-cart-btn" id="addToCartBtn">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-text">ADD TO CART</span>
+          </button>
+
+          <!-- PREVIOUS & NEXT PIECE BUTTONS -->
+          <div class="detail-carousel-nav">
+            <button class="detail-nav-btn" id="detailPrevPieceBtn" aria-label="Previous Piece">
+              <span class="nav-arrow">←</span> Previous
+            </button>
+            <button class="detail-nav-btn" id="detailNextPieceBtn" aria-label="Next Piece">
+              Next <span class="nav-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Shopping Toast Notification -->
+  <div class="cart-toast" id="cartToast">
+    <img src="assets/images/phantom.jpg" alt="Item preview" class="toast-img" id="toastImg">
+    <div class="toast-info">
+      <span class="toast-title" id="toastTitle">Added to Cart!</span>
+      <span class="toast-sub" id="toastSub">Your bespoke piece is reserved</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT APPLICATION LOGIC
+       ========================================================================== -->
+  <script>
+    /* ==========================================================================
+       1. LUXURY JEWELRY DATA STORE (ALL 7 PRODUCTS)
+       ========================================================================== */
+    const PRODUCTS = [
+      {
+        id: 1,
+        name: "Phantom Edition",
+        price: 20749,
+        category: "RINGS & SOLITAIRES",
+        heroTag: "SOLITAIRES & FINE PIECES",
+        subtitle: "18K Gold Solitaire Diamond Ring",
+        image: "assets/images/phantom.jpg",
+        description: "A masterwork of timeless grandeur. Features a brilliant 1.5-carat round brilliant-cut solitaire diamond mounted in hand-burnished 18K yellow gold six-prong cathedral setting.",
+        metal: "18K Yellow Gold",
+        gemstone: "VVS1 Solitaire Diamond",
+        sizes: ["6", "7", "8", "9"]
+      },
+      {
+        id: 2,
+        name: "Aurora",
+        price: 38499,
+        category: "HIGH JEWELLERY NECKLACES",
+        heroTag: "ROYAL CHOKER & EMERALD",
+        subtitle: "Diamond and Emerald Necklace on Velvet Bust",
+        image: "assets/images/aurora.jpg",
+        description: "Inspired by northern luminescence. A cascading arrangement of teardrop Zambian emeralds framed by round-cut diamond clusters draped in white gold.",
+        metal: "18K White Gold",
+        gemstone: "Zambian Emerald & Diamonds",
+        sizes: ["16 in", "18 in", "20 in"]
+      },
+      {
+        id: 3,
+        name: "Heritage",
+        price: 32499,
+        category: "HEIRLOOM COLLECTIONS",
+        heroTag: "CEYLON SAPPHIRE & GOLD",
+        subtitle: "Gold Necklace with Sapphire Blue Stones",
+        image: "assets/images/heritage.jpg",
+        description: "A majestic tribute to royal courts. Deep Ceylon sapphires nestled amid 22K intricate filigree scrollwork with diamond halos and teardrop pendants.",
+        metal: "22K Yellow Gold",
+        gemstone: "Royal Ceylon Sapphires",
+        sizes: ["16 in", "18 in", "20 in"]
+      },
+      {
+        id: 4,
+        name: "Nova Crystal",
+        price: 14849,
+        category: "TRADITIONAL EARRINGS",
+        heroTag: "SOUTH SEA PEARL JHUMKAS",
+        subtitle: "Gold Jhumka Earrings with Pearls",
+        image: "assets/images/nova.jpg",
+        description: "Sculpted heritage grace with modern poise. Intricately carved floral domes crowned with fine filigree and fringed with handpicked South Sea pearls.",
+        metal: "22K Yellow Gold",
+        gemstone: "South Sea Pearls & Diamonds",
+        sizes: ["Standard Drop"]
+      },
+      {
+        id: 5,
+        name: "Zenith Dark",
+        price: 21549,
+        category: "BRACELETS & BANGLES",
+        heroTag: "ROYAL GEOMETRIC KADAS",
+        subtitle: "Handcrafted 22K Gold Bangles",
+        image: "assets/images/zenith.jpg",
+        description: "Solid structural balance meets artisan mastery. Featuring hexagonal rosette motifs carved meticulously into rich yellow gold.",
+        metal: "22K Yellow Gold",
+        gemstone: "Solid Gold Relief",
+        sizes: ["2.4", "2.6", "2.8"]
+      },
+      {
+        id: 6,
+        name: "Lumina Gold",
+        price: 24949,
+        category: "FINE BRACELETS",
+        heroTag: "EMERALD TENNIS BRACELET",
+        subtitle: "Gold & Diamond Emerald Tennis Bracelet",
+        image: "assets/images/lumina.jpg",
+        description: "A continuous ribbon of pure radiance. Alternating emerald cuts and brilliant diamonds set into an articulated, flexible gold band.",
+        metal: "18K Yellow Gold",
+        gemstone: "Emerald & Pavé Diamonds",
+        sizes: ["6.5 in", "7.0 in", "7.5 in"]
+      },
+      {
+        id: 7,
+        name: "Stellar Ultra",
+        price: 26549,
+        category: "STATEMENT RINGS",
+        heroTag: "OXIDISED CELESTIAL PAIR",
+        subtitle: "Artisan Oxidised Silver Ring Pair",
+        image: "assets/images/stellar.jpg",
+        description: "Raw artisanal elegance. Cast in 925 sterling silver with deep antiqued patina and hand-chiseled relief textures depicting celestial motifs.",
+        metal: "925 Sterling Silver",
+        gemstone: "Oxidised Silver Relief",
+        sizes: ["7 & 9", "8 & 10", "Custom"]
+      }
+    ];
+
+    /* ==========================================================================
+       2. APPLICATION STATE
+       ========================================================================== */
+    const state = {
+      currentPhase: 1, // 1: Stacked hero, 2: Arc spread, 3: Product detail
+      activeCardIndex: 0, // Card in front
+      selectedCardIndex: 0, // For Phase 3 detail view
+      autoCycleTimer: null,
+      autoCycleInterval: 4500,
+      cartCount: 0
+    };
+
+    /* DOM References */
+    const stage = document.getElementById('showcaseStage');
+    const cardsDeck = document.getElementById('cardsDeckContainer');
+    const paginationBar = document.getElementById('paginationBar');
+    const heroCategoryLabel = document.getElementById('heroCategoryLabel');
+    const spreadHeaderSection = document.getElementById('spreadHeaderSection');
+    const phase1Controls = document.getElementById('phase1Controls');
+    const phase2Hint = document.getElementById('phase2Hint');
+    const returnToStackBtn = document.getElementById('returnToStackBtn');
+    const backToSpreadBtn = document.getElementById('backToSpreadBtn');
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    const cartCountBadge = document.getElementById('cartCountBadge');
+    const cartToast = document.getElementById('cartToast');
+    const luxeNav = document.getElementById('luxeNav');
+
+    // Phase Nav Pills
+    const pillPhase1 = document.getElementById('pillPhase1');
+    const pillPhase2 = document.getElementById('pillPhase2');
+    const pillPhase3 = document.getElementById('pillPhase3');
+
+    /* ==========================================================================
+       4. INITIALIZATION: RENDER CARDS & PAGINATION
+       ========================================================================== */
+    function formatINR(val) {
+      return '₹' + val.toLocaleString('en-IN');
+    }
+
+    function createAmbientSparkles() {
+      const container = document.getElementById('ambientSparkles');
+      const count = 18;
+      for (let i = 0; i < count; i++) {
+        const s = document.createElement('div');
+        s.className = 'ambient-sparkle';
+        s.style.left = `${Math.random() * 100}%`;
+        s.style.top = `${Math.random() * 100}%`;
+        s.style.animationDelay = `${Math.random() * 6}s`;
+        s.style.animationDuration = `${5 + Math.random() * 6}s`;
+        container.appendChild(s);
+      }
+    }
+
+    function renderShowcaseCards() {
+      cardsDeck.innerHTML = '';
+      paginationBar.innerHTML = '';
+
+      PRODUCTS.forEach((product, idx) => {
+        // Create Card Element
+        const card = document.createElement('div');
+        card.className = 'luxe-card';
+        card.id = `luxeCard-${idx}`;
+        card.dataset.index = idx;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `${product.name}, price ${formatINR(product.price)}`);
+
+        card.innerHTML = `
+          <div class="card-top-chip">
+            <span class="card-num">0${product.id}</span>
+            <span class="card-sparkle-icon">✦</span>
+          </div>
+
+          <div class="card-img-wrap">
+            <img src="${product.image}" alt="${product.name}" class="card-img" loading="eager">
+          </div>
+
+          <div class="card-overlay">
+            <h3 class="card-product-name">${product.name}</h3>
+            <div class="card-product-price">
+              <span class="currency">₹</span>
+              <span>${product.price.toLocaleString('en-IN')}</span>
+            </div>
+          </div>
+        `;
+
+        // Card Click Handler
+        card.addEventListener('click', (e) => {
+          handleCardClick(idx);
+        });
+
+        // Keyboard navigation
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCardClick(idx);
+          }
+        });
+
+        cardsDeck.appendChild(card);
+
+        // Create Pagination Dot
+        const dot = document.createElement('button');
+        dot.className = `dot-btn ${idx === 0 ? 'active' : ''}`;
+        dot.id = `dot-${idx}`;
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', `View ${product.name}`);
+        dot.addEventListener('click', () => {
+          goToHeroCard(idx);
+          resetAutoCycle();
+        });
+        paginationBar.appendChild(dot);
+      });
+    }
+
+    /* ==========================================================================
+       5. PHASE 1 – STACKED HERO CARD POSITIONING & LOGIC
+       ========================================================================== */
+    function updateHeroCategoryLabel(product) {
+      heroCategoryLabel.textContent = `${product.category} • ${product.heroTag}`;
+    }
+
+    function applyPhase1CardTransforms() {
+      const total = PRODUCTS.length;
+      const activeIdx = state.activeCardIndex;
+
+      // Update Category Label
+      updateHeroCategoryLabel(PRODUCTS[activeIdx]);
+
+      // Update Pagination Dots
+      document.querySelectorAll('.dot-btn').forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === activeIdx);
+      });
+
+      // Apply 3D stacked layout for Phase 1:
+      // Exactly 1 card centered, with 2 cards stacked slightly behind it (offset and rotated)
+      PRODUCTS.forEach((_, idx) => {
+        const card = document.getElementById(`luxeCard-${idx}`);
+        if (!card) return;
+
+        // Compute circular offset relative to active card
+        let offset = (idx - activeIdx + total) % total;
+
+        if (offset === 0) {
+          // FRONT HERO CARD: dead center, full size, sharpest shadow
+          if (window.gsap) {
+            gsap.to(card, {
+              x: 0,
+              y: 0,
+              z: 0,
+              rotationZ: 0,
+              rotationY: 0,
+              scale: 1.25,
+              opacity: 1,
+              zIndex: 10,
+              filter: 'brightness(1)',
+              boxShadow: '0 35px 70px -15px rgba(18, 42, 46, 0.38), 0 15px 25px -5px rgba(18, 42, 46, 0.15)',
+              duration: 0.65,
+              ease: 'power3.out'
+            });
+          } else {
+            card.style.transform = 'translate3d(0, 0, 0) rotate(0deg) scale(1.25)';
+            card.style.opacity = '1';
+            card.style.zIndex = '10';
+            card.style.filter = 'brightness(1)';
+            card.style.boxShadow = '0 35px 70px -15px rgba(18, 42, 46, 0.38)';
+          }
+        } else if (offset === 1) {
+          // 1ST CARD SLIGHTLY BEHIND: offset and rotated a few degrees
+          if (window.gsap) {
+            gsap.to(card, {
+              x: 26,
+              y: 16,
+              z: -50,
+              rotationZ: 4.5,
+              rotationY: -2,
+              scale: 1.18,
+              opacity: 0.92,
+              zIndex: 8,
+              filter: 'brightness(0.96)',
+              boxShadow: '0 25px 50px -15px rgba(18, 42, 46, 0.25)',
+              duration: 0.65,
+              ease: 'power3.out'
+            });
+          } else {
+            card.style.transform = 'translate3d(26px, 16px, -50px) rotate(4.5deg) scale(1.18)';
+            card.style.opacity = '0.92';
+            card.style.zIndex = '8';
+            card.style.filter = 'brightness(0.96)';
+          }
+        } else if (offset === 2) {
+          // 2ND CARD SLIGHTLY BEHIND: offset and rotated a few more degrees
+          if (window.gsap) {
+            gsap.to(card, {
+              x: 52,
+              y: 32,
+              z: -100,
+              rotationZ: 9,
+              rotationY: -4,
+              scale: 1.10,
+              opacity: 0.82,
+              zIndex: 6,
+              filter: 'brightness(0.92)',
+              boxShadow: '0 20px 40px -15px rgba(18, 42, 46, 0.2)',
+              duration: 0.65,
+              ease: 'power3.out'
+            });
+          } else {
+            card.style.transform = 'translate3d(52px, 32px, -100px) rotate(9deg) scale(1.10)';
+            card.style.opacity = '0.82';
+            card.style.zIndex = '6';
+            card.style.filter = 'brightness(0.92)';
+          }
+        } else {
+          // Remaining cards tucked deeply behind with opacity 0 so they can smoothly cycle in
+          if (window.gsap) {
+            gsap.to(card, {
+              x: 65,
+              y: 42,
+              z: -160,
+              rotationZ: 12,
+              rotationY: -5,
+              scale: 1.02,
+              opacity: 0,
+              zIndex: 1,
+              duration: 0.5,
+              ease: 'power3.out'
+            });
+          } else {
+            card.style.transform = 'translate3d(65px, 42px, -160px) rotate(12deg) scale(1.02)';
+            card.style.opacity = '0';
+            card.style.zIndex = '1';
+          }
+        }
+      });
+    }
+
+    function goToHeroCard(index) {
+      state.activeCardIndex = (index + PRODUCTS.length) % PRODUCTS.length;
+      applyPhase1CardTransforms();
+    }
+
+    function nextHeroCard() {
+      goToHeroCard(state.activeCardIndex + 1);
+    }
+
+    function prevHeroCard() {
+      goToHeroCard(state.activeCardIndex - 1);
+    }
+
+    function startAutoCycle() {
+      stopAutoCycle();
+      state.autoCycleTimer = setInterval(() => {
+        if (state.currentPhase === 1) {
+          nextHeroCard();
+        }
+      }, state.autoCycleInterval);
+    }
+
+    function stopAutoCycle() {
+      if (state.autoCycleTimer) {
+        clearInterval(state.autoCycleTimer);
+        state.autoCycleTimer = null;
+      }
+    }
+
+    function resetAutoCycle() {
+      stopAutoCycle();
+      startAutoCycle();
+    }
+
+    /* ==========================================================================
+       6. PHASE 2 – "The Ultimate COLLECTIONS" SPREAD (7-CARD ARC)
+       ========================================================================== */
+    function getSpreadArcConfig() {
+      const width = window.innerWidth;
+      const isMobile = width <= 768;
+      const isTablet = width <= 1024 && width > 768;
+
+      let xStep, cardScale;
+      if (isMobile) {
+        xStep = Math.max(55, Math.min(80, (width - 30) / 6.2));
+        cardScale = 0.72;
+      } else if (isTablet) {
+        xStep = Math.max(125, Math.min(155, (width - 60) / 6.8));
+        cardScale = 0.82;
+      } else {
+        // Desktop: generous spacing with clear visible gap between each card (~30px gap)
+        xStep = Math.max(195, Math.min(235, (width - 120) / 6.6));
+        cardScale = 0.88;
+      }
+
+      // Elegant, gentle tilt and curvature
+      const rotations = [-10, -6.5, -3, 0, 3, 6.5, 10];
+      const yOffsets = [28, 14, 3, 0, 3, 14, 28];
+      const zIndices = [10, 12, 14, 16, 14, 12, 10];
+
+      return { xStep, cardScale, rotations, yOffsets, zIndices };
+    }
+
+    function applyPhase2SpreadTransforms() {
+      const config = getSpreadArcConfig();
+      const centerIdx = 3; // Center card is index 3
+
+      PRODUCTS.forEach((_, idx) => {
+        const card = document.getElementById(`luxeCard-${idx}`);
+        if (!card) return;
+
+        const delta = idx - centerIdx;
+        const xPos = delta * config.xStep;
+        const yPos = config.yOffsets[idx];
+        const rot = config.rotations[idx];
+        const zIdx = config.zIndices[idx];
+
+        if (window.gsap) {
+          gsap.to(card, {
+            x: xPos,
+            y: yPos,
+            z: 0,
+            rotationZ: rot,
+            rotationY: delta * 1.5,
+            scale: config.cardScale,
+            opacity: 1,
+            zIndex: zIdx,
+            filter: 'brightness(1)',
+            boxShadow: '0 20px 45px -10px rgba(14, 38, 43, 0.28)',
+            duration: 0.85,
+            delay: Math.abs(delta) * 0.04,
+            ease: 'power3.out'
+          });
+        } else {
+          card.style.transform = `translate3d(${xPos}px, ${yPos}px, 0) rotate(${rot}deg) scale(${config.cardScale})`;
+          card.style.opacity = '1';
+          card.style.zIndex = zIdx;
+          card.style.filter = 'brightness(1)';
+          card.style.boxShadow = '0 20px 45px -10px rgba(14, 38, 43, 0.28)';
+        }
+
+        // Attach hover behavior: lifts and straightens WITHOUT scaling bigger or zooming image
+        card.onmouseenter = () => {
+          if (state.currentPhase !== 2) return;
+          if (window.gsap) {
+            gsap.to(card, {
+              y: yPos - 20,
+              rotationZ: 0,
+              scale: config.cardScale,
+              zIndex: 90,
+              boxShadow: '0 28px 55px -10px rgba(10, 30, 35, 0.36)',
+              duration: 0.35,
+              ease: 'power2.out'
+            });
+          }
+        };
+        card.onmouseleave = () => {
+          if (state.currentPhase !== 2) return;
+          if (window.gsap) {
+            gsap.to(card, {
+              y: yPos,
+              rotationZ: rot,
+              scale: config.cardScale,
+              zIndex: zIdx,
+              boxShadow: '0 20px 45px -10px rgba(14, 38, 43, 0.28)',
+              duration: 0.35,
+              ease: 'power2.out'
+            });
+          }
+        };
+      });
+    }
+
+    /* ==========================================================================
+       7. PHASE 3 – PRODUCT DETAIL VIEW (FLY LEFT & SCALE UP)
+       ========================================================================== */
+    function populateProductDetails(product) {
+      const titleEl = document.getElementById('detailTitle');
+      const priceEl = document.getElementById('detailPrice');
+      if (titleEl) titleEl.textContent = product.name;
+      if (priceEl) priceEl.textContent = formatINR(product.price);
+
+      // Reset Add to Cart button state
+      addToCartBtn.classList.remove('added');
+      addToCartBtn.innerHTML = `<span class="cart-icon">🛒</span><span class="cart-text">ADD TO CART</span>`;
+    }
+
+    function applyPhase3DetailTransforms(selectedIdx) {
+      state.selectedCardIndex = selectedIdx;
+      const product = PRODUCTS[selectedIdx];
+      populateProductDetails(product);
+
+      const isMobile = window.innerWidth <= 1024;
+
+      // Fly target card to the left and scale up, with other cards stacked behind it
+      PRODUCTS.forEach((_, idx) => {
+        const card = document.getElementById(`luxeCard-${idx}`);
+        if (!card) return;
+
+        // Reset hover listeners in phase 3
+        card.onmouseenter = null;
+        card.onmouseleave = null;
+
+        if (idx === selectedIdx) {
+          // Selected Hero Card: Flies to the left and scales up
+          const targetX = isMobile ? 0 : -270;
+          const targetY = isMobile ? -20 : 0;
+          const targetScale = isMobile ? 1.08 : 1.28;
+
+          if (window.gsap) {
+            gsap.to(card, {
+              x: targetX,
+              y: targetY,
+              z: 80,
+              rotationZ: 0,
+              rotationY: isMobile ? 0 : 4,
+              scale: targetScale,
+              opacity: 1,
+              zIndex: 50,
+              filter: 'brightness(1)',
+              boxShadow: '0 45px 85px -15px rgba(10, 28, 32, 0.45)',
+              duration: 0.85,
+              ease: 'power3.out'
+            });
+          } else {
+            card.style.transform = `translate3d(${targetX}px, ${targetY}px, 80px) rotate(0deg) scale(${targetScale})`;
+            card.style.opacity = '1';
+            card.style.zIndex = '50';
+          }
+        } else {
+          // Other cards stacked gracefully behind it
+          const stackRank = (idx - selectedIdx + PRODUCTS.length) % PRODUCTS.length;
+          const stackX = isMobile ? (stackRank * 14) : (-270 + stackRank * 24);
+          const stackY = isMobile ? (-20 + stackRank * 8) : (stackRank * 12);
+          const stackRot = stackRank * 3;
+          const stackScale = Math.max(0.75, 1.15 - stackRank * 0.06);
+          const stackOpacity = Math.max(0, 0.65 - stackRank * 0.12);
+
+          if (window.gsap) {
+            gsap.to(card, {
+              x: stackX,
+              y: stackY,
+              z: -stackRank * 40,
+              rotationZ: stackRot,
+              rotationY: -4,
+              scale: stackScale,
+              opacity: stackOpacity,
+              zIndex: 30 - stackRank,
+              filter: 'brightness(0.92)',
+              boxShadow: '0 20px 40px -15px rgba(15, 38, 42, 0.25)',
+              duration: 0.85,
+              ease: 'power3.out'
+            });
+          } else {
+            card.style.transform = `translate3d(${stackX}px, ${stackY}px, -${stackRank * 40}px) rotate(${stackRot}deg) scale(${stackScale})`;
+            card.style.opacity = String(stackOpacity);
+            card.style.zIndex = String(30 - stackRank);
+          }
+        }
+      });
+    }
+
+    /* ==========================================================================
+       8. PHASE TRANSITION CONTROLLER (PHASES 1, 2, 3)
+       ========================================================================== */
+    function setPhase(phase, targetCardIdx = null) {
+      state.currentPhase = phase;
+
+      // Update Nav Pills
+      pillPhase1.classList.toggle('active', phase === 1);
+      pillPhase2.classList.toggle('active', phase === 2);
+      pillPhase3.classList.toggle('active', phase === 3);
+
+      // Update Stage Classes
+      stage.classList.remove('is-phase-1', 'is-phase-2', 'is-phase-3');
+      stage.classList.add(`is-phase-${phase}`);
+
+      if (phase === 1) {
+        // --- PHASE 1 ---
+        heroCategoryLabel.style.display = 'flex';
+        spreadHeaderSection.style.opacity = '0';
+        spreadHeaderSection.style.transform = 'translateY(-20px)';
+        phase1Controls.style.display = 'flex';
+        phase2Hint.style.display = 'none';
+        returnToStackBtn.style.display = 'none';
+
+        applyPhase1CardTransforms();
+        startAutoCycle();
+
+      } else if (phase === 2) {
+        // --- PHASE 2 ---
+        stopAutoCycle();
+        heroCategoryLabel.style.display = 'none';
+        spreadHeaderSection.style.opacity = '1';
+        spreadHeaderSection.style.transform = 'translateY(0)';
+        phase1Controls.style.display = 'none';
+        phase2Hint.style.display = 'flex';
+        returnToStackBtn.style.display = 'flex';
+
+        applyPhase2SpreadTransforms();
+
+      } else if (phase === 3) {
+        // --- PHASE 3 ---
+        stopAutoCycle();
+        heroCategoryLabel.style.display = 'none';
+        spreadHeaderSection.style.opacity = '0';
+        spreadHeaderSection.style.transform = 'translateY(-20px)';
+        phase1Controls.style.display = 'none';
+        phase2Hint.style.display = 'none';
+        returnToStackBtn.style.display = 'none';
+
+        const chosenIdx = targetCardIdx !== null ? targetCardIdx : state.activeCardIndex;
+        applyPhase3DetailTransforms(chosenIdx);
+      }
+    }
+
+    function handleCardClick(idx) {
+      if (state.currentPhase === 1) {
+        if (idx === state.activeCardIndex) {
+          // Clicking front hero card triggers Phase 2 spread
+          setPhase(2);
+        } else {
+          goToHeroCard(idx);
+          resetAutoCycle();
+        }
+      } else if (state.currentPhase === 2) {
+        // Clicking a card in the spread flies it into Phase 3 detail view!
+        setPhase(3, idx);
+      }
+    }
+
+    /* ==========================================================================
+       9. EVENT LISTENERS & USER INTERACTIONS
+       ========================================================================== */
+    // Top Nav Phase Pills
+    pillPhase1.addEventListener('click', () => setPhase(1));
+    pillPhase2.addEventListener('click', () => setPhase(2));
+    pillPhase3.addEventListener('click', () => setPhase(3, state.activeCardIndex));
+
+    // Logo returns to Phase 1
+    document.getElementById('brandLogo').addEventListener('click', (e) => {
+      e.preventDefault();
+      setPhase(1);
+    });
+
+    // Phase 1 Controls
+    document.getElementById('prevCardBtn').addEventListener('click', () => {
+      prevHeroCard();
+      resetAutoCycle();
+    });
+    document.getElementById('nextCardBtn').addEventListener('click', () => {
+      nextHeroCard();
+      resetAutoCycle();
+    });
+    document.getElementById('fanOutTriggerBtn').addEventListener('click', () => {
+      setPhase(2);
+    });
+
+    // Phase 2 Return button
+    returnToStackBtn.addEventListener('click', () => {
+      setPhase(1);
+    });
+
+    // Phase 3 Back Button (returns to spread with reverse animation)
+    backToSpreadBtn.addEventListener('click', () => {
+      setPhase(2);
+    });
+
+    // Phase 3 Next / Prev Piece Carousel
+    document.getElementById('detailPrevPieceBtn').addEventListener('click', () => {
+      const prevIdx = (state.selectedCardIndex - 1 + PRODUCTS.length) % PRODUCTS.length;
+      applyPhase3DetailTransforms(prevIdx);
+    });
+    document.getElementById('detailNextPieceBtn').addEventListener('click', () => {
+      const nextIdx = (state.selectedCardIndex + 1) % PRODUCTS.length;
+      applyPhase3DetailTransforms(nextIdx);
+    });
+
+    // Add to Cart Button Interaction
+    addToCartBtn.addEventListener('click', () => {
+      state.cartCount++;
+      cartCountBadge.textContent = state.cartCount;
+      cartCountBadge.classList.add('bump');
+      setTimeout(() => cartCountBadge.classList.remove('bump'), 300);
+
+      // Change button state to "✓ Added to Cart!"
+      addToCartBtn.classList.add('added');
+      addToCartBtn.innerHTML = `<span>✓</span><span>Added to Cart!</span>`;
+
+      // Trigger Confetti Celebration
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: { y: 0.75 },
+          colors: ['#c5a059', '#ecd69a', '#9CC5CC', '#111416', '#ffffff']
+        });
+      }
+
+      // Show Cart Toast Notification
+      const activeProduct = PRODUCTS[state.selectedCardIndex];
+      document.getElementById('toastImg').src = activeProduct.image;
+      document.getElementById('toastTitle').textContent = `${activeProduct.name} Added!`;
+      document.getElementById('toastSub').textContent = `${formatINR(activeProduct.price)} reserved in your vault`;
+      cartToast.classList.add('visible');
+      setTimeout(() => cartToast.classList.remove('visible'), 3200);
+
+      // Revert button text after 3.2s
+      setTimeout(() => {
+        if (state.currentPhase === 3) {
+          addToCartBtn.classList.remove('added');
+          addToCartBtn.innerHTML = `<span class="cart-icon">🛒</span><span class="cart-text">ADD TO CART</span>`;
+        }
+      }, 3200);
+    });
+
+    // Cart Button quick view
+    document.getElementById('cartBtn').addEventListener('click', () => {
+      if (state.cartCount === 0) {
+        document.getElementById('toastTitle').textContent = `Luxury Vault Empty`;
+        document.getElementById('toastSub').textContent = `Explore pieces and add them to your cart`;
+      } else {
+        document.getElementById('toastTitle').textContent = `${state.cartCount} Bespoke Pieces`;
+        document.getElementById('toastSub').textContent = `Proceed to White-Glove Concierge Checkout`;
+      }
+      cartToast.classList.add('visible');
+      setTimeout(() => cartToast.classList.remove('visible'), 3000);
+    });
+
+    // Scroll Wheel Transition between Phase 1 and Phase 2
+    let isScrollDebounced = false;
+    window.addEventListener('wheel', (e) => {
+      if (isScrollDebounced) return;
+      if (state.currentPhase === 1 && e.deltaY > 35) {
+        isScrollDebounced = true;
+        setPhase(2);
+        setTimeout(() => { isScrollDebounced = false; }, 900);
+      } else if (state.currentPhase === 2 && e.deltaY < -35) {
+        isScrollDebounced = true;
+        setPhase(1);
+        setTimeout(() => { isScrollDebounced = false; }, 900);
+      }
+    }, { passive: true });
+
+    // Touch Swipe gesture support on Card Stack
+    let touchStartX = 0;
+    let touchStartY = 0;
+    cardsDeck.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    cardsDeck.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].screenX;
+      const touchEndY = e.changedTouches[0].screenY;
+      const diffX = touchEndX - touchStartX;
+      const diffY = touchEndY - touchStartY;
+
+      if (state.currentPhase === 1) {
+        if (Math.abs(diffX) > 40) {
+          if (diffX < 0) nextHeroCard();
+          else prevHeroCard();
+          resetAutoCycle();
+        } else if (diffY < -50) {
+          setPhase(2);
+        }
+      }
+    }, { passive: true });
+
+    // Window Resize Responsive recalculation
+    window.addEventListener('resize', () => {
+      if (state.currentPhase === 1) {
+        applyPhase1CardTransforms();
+      } else if (state.currentPhase === 2) {
+        applyPhase2SpreadTransforms();
+      } else if (state.currentPhase === 3) {
+        applyPhase3DetailTransforms(state.selectedCardIndex);
+      }
+    });
+
+    // Pause Auto-Cycle on card hover
+    cardsDeck.addEventListener('mouseenter', stopAutoCycle);
+    cardsDeck.addEventListener('mouseleave', () => {
+      if (state.currentPhase === 1) startAutoCycle();
+    });
+
+    /* ==========================================================================
+       10. START APPLICATION
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      createAmbientSparkles();
+      renderShowcaseCards();
+      setPhase(1);
+    });
+  </script>
+</body>
+</html>
