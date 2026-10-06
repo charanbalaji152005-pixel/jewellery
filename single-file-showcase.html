@@ -620,7 +620,8 @@
       50% { opacity: 1; transform: translateY(-4px); }
     }
 
-    /* Phase 2 Card Hover Straighten & Lift (Handled smoothly via JS/GSAP preserving position & scale) */
+    /* Card Hover Straighten & Lift (Handled smoothly via JS/GSAP preserving position & scale) */
+    .showcase-stage.is-phase-1 .luxe-card,
     .showcase-stage.is-phase-2 .luxe-card {
       cursor: pointer;
     }
@@ -1120,8 +1121,8 @@
 
       <!-- Quick Phase Navigation Pills -->
       <nav class="nav-phase-indicators" aria-label="Showcase Phases">
-        <button class="phase-pill active" id="pillPhase1" data-phase="1">Hero Stack</button>
-        <button class="phase-pill" id="pillPhase2" data-phase="2">Spread Arc</button>
+        <button class="phase-pill active" id="pillPhase1" data-phase="1">Spread Arc</button>
+        <button class="phase-pill" id="pillPhase2" data-phase="2">Hero Stack</button>
         <button class="phase-pill" id="pillPhase3" data-phase="3">Piece Details</button>
       </nav>
 
@@ -1138,26 +1139,26 @@
     <main class="showcase-stage is-phase-1" id="showcaseStage">
 
       <!-- ========================================================
-           PHASE 1 HEADER: Tiny Uppercase Category Label
+           PHASE 1 SPREAD HEADER: "The Ultimate" + "COLLECTIONS"
            ======================================================== -->
-      <div class="phase-1" id="phase1HeaderSection">
-        <div class="hero-category-label" id="heroCategoryLabel">
-          FINE JEWELLERY • SIGNATURE SELECTIONS
-        </div>
-      </div>
-
-      <!-- ========================================================
-           PHASE 2 SPREAD HEADER: "The Ultimate" + "COLLECTIONS"
-           ======================================================== -->
-      <div class="spread-header" id="spreadHeaderSection" style="opacity: 0; transform: translateY(-20px);">
+      <div class="spread-header" id="spreadHeaderSection" style="opacity: 1; transform: translateY(0);">
         <span class="spread-sub">The Ultimate</span>
         <h1 class="spread-title">COLLECTIONS</h1>
       </div>
 
-      <!-- Back to Stack View button when in Spread -->
-      <button class="return-to-stack-btn" id="returnToStackBtn" style="display: none;">
-        <span>↑</span> Stack View
+      <!-- Switch to Hero Stack button when in Phase 1 (Spread Arc) -->
+      <button class="return-to-stack-btn" id="returnToStackBtn" style="display: flex;">
+        <span>↓</span> Hero Stack
       </button>
+
+      <!-- ========================================================
+           PHASE 2 HEADER: Tiny Uppercase Category Label
+           ======================================================== -->
+      <div class="phase-1" id="phase1HeaderSection" style="display: none;">
+        <div class="hero-category-label" id="heroCategoryLabel">
+          FINE JEWELLERY • SIGNATURE SELECTIONS
+        </div>
+      </div>
 
       <!-- Back Button for Phase 3 (Top Left) -->
       <button class="back-btn" id="backToSpreadBtn">
@@ -1172,9 +1173,9 @@
       </div>
 
       <!-- ========================================================
-           PHASE 1 CONTROLS: Pagination Dots & Cycle Controls
+           PHASE 2 CONTROLS: Pagination Dots & Cycle Controls
            ======================================================== -->
-      <div class="phase-1-controls" id="phase1Controls">
+      <div class="phase-1-controls" id="phase1Controls" style="display: none;">
         <div class="pagination-bar" id="paginationBar" role="tablist" aria-label="Products Pagination">
           <!-- 7 pagination dots injected via JS -->
         </div>
@@ -1185,8 +1186,8 @@
         </div>
 
         <button class="phase-1-cta-btn" id="fanOutTriggerBtn">
-          <span>Explore All 7 Pieces</span>
-          <span class="arrow-icon">↓</span>
+          <span>Back to Spread Arc</span>
+          <span class="arrow-icon">↑</span>
         </button>
       </div>
 
@@ -1617,7 +1618,7 @@
     }
 
     /* ==========================================================================
-       6. PHASE 2 – "The Ultimate COLLECTIONS" SPREAD (7-CARD ARC)
+       6. PHASE 1 – "The Ultimate COLLECTIONS" SPREAD (7-CARD ARC)
        ========================================================================== */
     function getSpreadArcConfig() {
       const width = window.innerWidth;
@@ -1626,14 +1627,14 @@
 
       let xStep, cardScale;
       if (isMobile) {
-        xStep = Math.max(55, Math.min(80, (width - 30) / 6.2));
+        xStep = Math.max(50, Math.min(72, (width - 30) / 6.6));
         cardScale = 0.72;
       } else if (isTablet) {
-        xStep = Math.max(125, Math.min(155, (width - 60) / 6.8));
+        xStep = Math.max(115, Math.min(142, (width - 60) / 7.2));
         cardScale = 0.82;
       } else {
-        // Desktop: generous spacing with clear visible gap between each card (~30px gap)
-        xStep = Math.max(195, Math.min(235, (width - 120) / 6.6));
+        // Desktop: reduced gap between cards (~10-22px gap instead of previous wide spacing)
+        xStep = Math.max(178, Math.min(210, (width - 120) / 7.2));
         cardScale = 0.88;
       }
 
@@ -1685,7 +1686,7 @@
 
         // Attach hover behavior: lifts and straightens WITHOUT scaling bigger or zooming image
         card.onmouseenter = () => {
-          if (state.currentPhase !== 2) return;
+          if (state.currentPhase !== 1) return;
           if (window.gsap) {
             gsap.to(card, {
               y: yPos - 20,
@@ -1699,7 +1700,7 @@
           }
         };
         card.onmouseleave = () => {
-          if (state.currentPhase !== 2) return;
+          if (state.currentPhase !== 1) return;
           if (window.gsap) {
             gsap.to(card, {
               y: yPos,
@@ -1820,19 +1821,7 @@
       stage.classList.add(`is-phase-${phase}`);
 
       if (phase === 1) {
-        // --- PHASE 1 ---
-        heroCategoryLabel.style.display = 'flex';
-        spreadHeaderSection.style.opacity = '0';
-        spreadHeaderSection.style.transform = 'translateY(-20px)';
-        phase1Controls.style.display = 'flex';
-        phase2Hint.style.display = 'none';
-        returnToStackBtn.style.display = 'none';
-
-        applyPhase1CardTransforms();
-        startAutoCycle();
-
-      } else if (phase === 2) {
-        // --- PHASE 2 ---
+        // --- PHASE 1: SPREAD ARC ---
         stopAutoCycle();
         heroCategoryLabel.style.display = 'none';
         spreadHeaderSection.style.opacity = '1';
@@ -1840,11 +1829,25 @@
         phase1Controls.style.display = 'none';
         phase2Hint.style.display = 'flex';
         returnToStackBtn.style.display = 'flex';
+        returnToStackBtn.innerHTML = `<span>↓</span> Hero Stack`;
 
         applyPhase2SpreadTransforms();
 
+      } else if (phase === 2) {
+        // --- PHASE 2: HERO STACK ---
+        heroCategoryLabel.style.display = 'flex';
+        spreadHeaderSection.style.opacity = '0';
+        spreadHeaderSection.style.transform = 'translateY(-20px)';
+        phase1Controls.style.display = 'flex';
+        phase2Hint.style.display = 'none';
+        returnToStackBtn.style.display = 'flex';
+        returnToStackBtn.innerHTML = `<span>↑</span> Spread Arc`;
+
+        applyPhase1CardTransforms();
+        startAutoCycle();
+
       } else if (phase === 3) {
-        // --- PHASE 3 ---
+        // --- PHASE 3: PRODUCT DETAIL ---
         stopAutoCycle();
         heroCategoryLabel.style.display = 'none';
         spreadHeaderSection.style.opacity = '0';
@@ -1860,16 +1863,15 @@
 
     function handleCardClick(idx) {
       if (state.currentPhase === 1) {
+        // Clicking a card in the spread flies it into Phase 3 detail view!
+        setPhase(3, idx);
+      } else if (state.currentPhase === 2) {
         if (idx === state.activeCardIndex) {
-          // Clicking front hero card triggers Phase 2 spread
-          setPhase(2);
+          setPhase(3, idx);
         } else {
           goToHeroCard(idx);
           resetAutoCycle();
         }
-      } else if (state.currentPhase === 2) {
-        // Clicking a card in the spread flies it into Phase 3 detail view!
-        setPhase(3, idx);
       }
     }
 
@@ -1887,7 +1889,7 @@
       setPhase(1);
     });
 
-    // Phase 1 Controls
+    // Phase 2 Hero Stack Controls
     document.getElementById('prevCardBtn').addEventListener('click', () => {
       prevHeroCard();
       resetAutoCycle();
@@ -1897,17 +1899,17 @@
       resetAutoCycle();
     });
     document.getElementById('fanOutTriggerBtn').addEventListener('click', () => {
-      setPhase(2);
-    });
-
-    // Phase 2 Return button
-    returnToStackBtn.addEventListener('click', () => {
       setPhase(1);
     });
 
-    // Phase 3 Back Button (returns to spread with reverse animation)
+    // Return / Toggle button
+    returnToStackBtn.addEventListener('click', () => {
+      setPhase(state.currentPhase === 1 ? 2 : 1);
+    });
+
+    // Phase 3 Back Button (returns to Spread Arc)
     backToSpreadBtn.addEventListener('click', () => {
-      setPhase(2);
+      setPhase(1);
     });
 
     // Phase 3 Next / Prev Piece Carousel
@@ -2001,12 +2003,16 @@
       const diffY = touchEndY - touchStartY;
 
       if (state.currentPhase === 1) {
+        if (diffY < -50) {
+          setPhase(2);
+        }
+      } else if (state.currentPhase === 2) {
         if (Math.abs(diffX) > 40) {
           if (diffX < 0) nextHeroCard();
           else prevHeroCard();
           resetAutoCycle();
-        } else if (diffY < -50) {
-          setPhase(2);
+        } else if (diffY > 50) {
+          setPhase(1);
         }
       }
     }, { passive: true });
@@ -2014,9 +2020,9 @@
     // Window Resize Responsive recalculation
     window.addEventListener('resize', () => {
       if (state.currentPhase === 1) {
-        applyPhase1CardTransforms();
-      } else if (state.currentPhase === 2) {
         applyPhase2SpreadTransforms();
+      } else if (state.currentPhase === 2) {
+        applyPhase1CardTransforms();
       } else if (state.currentPhase === 3) {
         applyPhase3DetailTransforms(state.selectedCardIndex);
       }
@@ -2025,7 +2031,7 @@
     // Pause Auto-Cycle on card hover
     cardsDeck.addEventListener('mouseenter', stopAutoCycle);
     cardsDeck.addEventListener('mouseleave', () => {
-      if (state.currentPhase === 1) startAutoCycle();
+      if (state.currentPhase === 2) startAutoCycle();
     });
 
     /* ==========================================================================

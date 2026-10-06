@@ -601,7 +601,8 @@ body::before {
   50% { opacity: 1; transform: translateY(-4px); }
 }
 
-/* Phase 2 Card Hover Straighten & Lift (Handled smoothly via GSAP preserving position & scale) */
+/* Card Hover Straighten & Lift (Handled smoothly via GSAP preserving position & scale) */
+.showcase-stage.is-phase-1 .luxe-card,
 .showcase-stage.is-phase-2 .luxe-card {
   cursor: pointer;
 }

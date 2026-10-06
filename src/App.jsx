@@ -36,7 +36,55 @@ export default function App() {
     const isTablet = width <= 1024 && width > 768;
 
     if (phase === 1) {
-      // PHASE 1: STACKED HERO CARD
+      // PHASE 1: SPREAD ARC (FIRST VIEW)
+      // Spread out into a horizontal arc of 7 cards with reduced gap for a cohesive, elegant curve
+      let xStep, cardScale;
+      if (isMobile) {
+        xStep = Math.max(50, Math.min(72, (width - 30) / 6.6));
+        cardScale = 0.72;
+      } else if (isTablet) {
+        xStep = Math.max(115, Math.min(142, (width - 60) / 7.2));
+        cardScale = 0.82;
+      } else {
+        // Desktop: reduced gap between cards (~10-22px gap instead of previous wide spacing)
+        xStep = Math.max(178, Math.min(210, (width - 120) / 7.2));
+        cardScale = 0.88;
+      }
+
+      // Elegant, gentle tilt and curvature so all cards stay clearly legible
+      const rotations = [-10, -6.5, -3, 0, 3, 6.5, 10];
+      const yOffsets = [28, 14, 3, 0, 3, 14, 28];
+      const zIndices = [10, 12, 14, 16, 14, 12, 10];
+      const centerIdx = 3;
+
+      PRODUCTS.forEach((_, idx) => {
+        const card = cardsRef.current[idx];
+        if (!card) return;
+
+        const delta = idx - centerIdx;
+        const xPos = delta * xStep;
+        const yPos = yOffsets[idx];
+        const rot = rotations[idx];
+        const zIdx = zIndices[idx];
+
+        gsap.to(card, {
+          x: xPos,
+          y: yPos,
+          z: 0,
+          rotationZ: rot,
+          rotationY: delta * 1.5,
+          scale: cardScale,
+          opacity: 1,
+          zIndex: zIdx,
+          filter: 'brightness(1)',
+          boxShadow: '0 20px 45px -10px rgba(14, 38, 43, 0.28)',
+          duration: 0.85,
+          delay: Math.abs(delta) * 0.04,
+          ease: 'power3.out'
+        });
+      });
+    } else if (phase === 2) {
+      // PHASE 2: STACKED HERO CARD (SECOND VIEW)
       // 1 product card centered, 2 more stacked slightly behind it (offset & rotated a few degrees)
       const total = PRODUCTS.length;
       PRODUCTS.forEach((_, idx) => {
@@ -105,54 +153,6 @@ export default function App() {
           });
         }
       });
-    } else if (phase === 2) {
-      // PHASE 2: SPREAD ARC
-      // Spread out into a horizontal arc of 7 cards with CLEAR VIEW and visible gap between each card
-      let xStep, cardScale;
-      if (isMobile) {
-        xStep = Math.max(55, Math.min(80, (width - 30) / 6.2));
-        cardScale = 0.72;
-      } else if (isTablet) {
-        xStep = Math.max(125, Math.min(155, (width - 60) / 6.8));
-        cardScale = 0.82;
-      } else {
-        // Desktop: generous spacing with clear visible gap between each card (~30px gap)
-        xStep = Math.max(195, Math.min(235, (width - 120) / 6.6));
-        cardScale = 0.88;
-      }
-
-      // Elegant, gentle tilt and curvature so all cards stay clearly legible
-      const rotations = [-10, -6.5, -3, 0, 3, 6.5, 10];
-      const yOffsets = [28, 14, 3, 0, 3, 14, 28];
-      const zIndices = [10, 12, 14, 16, 14, 12, 10];
-      const centerIdx = 3;
-
-      PRODUCTS.forEach((_, idx) => {
-        const card = cardsRef.current[idx];
-        if (!card) return;
-
-        const delta = idx - centerIdx;
-        const xPos = delta * xStep;
-        const yPos = yOffsets[idx];
-        const rot = rotations[idx];
-        const zIdx = zIndices[idx];
-
-        gsap.to(card, {
-          x: xPos,
-          y: yPos,
-          z: 0,
-          rotationZ: rot,
-          rotationY: delta * 1.5,
-          scale: cardScale,
-          opacity: 1,
-          zIndex: zIdx,
-          filter: 'brightness(1)',
-          boxShadow: '0 20px 45px -10px rgba(14, 38, 43, 0.28)',
-          duration: 0.85,
-          delay: Math.abs(delta) * 0.04,
-          ease: 'power3.out'
-        });
-      });
     } else if (phase === 3) {
       // PHASE 3: PRODUCT DETAIL VIEW
       // Card flies to the left and scales up, with other cards stacked behind it
@@ -208,9 +208,9 @@ export default function App() {
     }
   }, [phase, activeCardIndex, selectedCardIndex]);
 
-  // Phase 1 Auto-cycle timer
+  // Phase 2 (Hero Stack) Auto-cycle timer
   useEffect(() => {
-    if (phase === 1) {
+    if (phase === 2) {
       autoCycleTimerRef.current = setInterval(() => {
         setActiveCardIndex((prev) => (prev + 1) % PRODUCTS.length);
       }, 4500);
@@ -222,7 +222,7 @@ export default function App() {
     };
   }, [phase]);
 
-  // Mouse Wheel scroll transitions between Phase 1 and 2
+  // Mouse Wheel scroll transitions between Phase 1 (Spread Arc) and Phase 2 (Hero Stack)
   useEffect(() => {
     const handleWheel = (e) => {
       if (isScrollDebouncedRef.current) return;
@@ -243,20 +243,23 @@ export default function App() {
   // Card Click Interaction
   const handleCardClick = (idx) => {
     if (phase === 1) {
+      // In Spread Arc: clicking any card opens its detail view
+      setSelectedCardIndex(idx);
+      setPhase(3);
+    } else if (phase === 2) {
+      // In Hero Stack: clicking front card opens detail view, clicking behind card brings to front
       if (idx === activeCardIndex) {
-        setPhase(2);
+        setSelectedCardIndex(idx);
+        setPhase(3);
       } else {
         setActiveCardIndex(idx);
       }
-    } else if (phase === 2) {
-      setSelectedCardIndex(idx);
-      setPhase(3);
     }
   };
 
-  // Phase 2 Hover without zooming/scaling bigger
+  // Phase 1 (Spread Arc) Hover without zooming/scaling bigger
   const handleCardHover = (idx, isHovering) => {
-    if (phase !== 2) return;
+    if (phase !== 1) return;
     const card = cardsRef.current[idx];
     if (!card) return;
 
@@ -340,14 +343,18 @@ export default function App() {
     const diffY = endY - touchStartRef.current.y;
 
     if (phase === 1) {
+      if (diffY < -50) {
+        setPhase(2);
+      }
+    } else if (phase === 2) {
       if (Math.abs(diffX) > 40) {
         if (diffX < 0) {
           setActiveCardIndex((prev) => (prev + 1) % PRODUCTS.length);
         } else {
           setActiveCardIndex((prev) => (prev - 1 + PRODUCTS.length) % PRODUCTS.length);
         }
-      } else if (diffY < -50) {
-        setPhase(2);
+      } else if (diffY > 50) {
+        setPhase(1);
       }
     }
   };
@@ -369,13 +376,13 @@ export default function App() {
             className={`phase-pill ${phase === 1 ? 'active' : ''}`}
             onClick={() => setPhase(1)}
           >
-            Hero Stack
+            Spread Arc
           </button>
           <button
             className={`phase-pill ${phase === 2 ? 'active' : ''}`}
             onClick={() => setPhase(2)}
           >
-            Spread Arc
+            Hero Stack
           </button>
           <button
             className={`phase-pill ${phase === 3 ? 'active' : ''}`}
@@ -408,8 +415,31 @@ export default function App() {
 
       {/* Main 3-Phase Stage */}
       <main className={`showcase-stage is-phase-${phase}`}>
-        {/* PHASE 1: Tiny Uppercase Category Label */}
+        {/* PHASE 1: Spread Header */}
+        <div
+          className="spread-header"
+          style={{
+            opacity: phase === 1 ? 1 : 0,
+            transform: phase === 1 ? 'translateY(0)' : 'translateY(-20px)',
+            pointerEvents: phase === 1 ? 'all' : 'none'
+          }}
+        >
+          <span className="spread-sub">The Ultimate</span>
+          <h1 className="spread-title">COLLECTIONS</h1>
+        </div>
+
+        {/* Switch to Hero Stack Button when in Phase 1 */}
         {phase === 1 && (
+          <button
+            className="return-to-stack-btn"
+            onClick={() => setPhase(2)}
+          >
+            <span>↓</span> Hero Stack
+          </button>
+        )}
+
+        {/* PHASE 2: Tiny Uppercase Category Label */}
+        {phase === 2 && (
           <div className="phase-1">
             <div className="hero-category-label">
               {activeProduct.category} • {activeProduct.heroTag}
@@ -417,26 +447,13 @@ export default function App() {
           </div>
         )}
 
-        {/* PHASE 2: Spread Header */}
-        <div
-          className="spread-header"
-          style={{
-            opacity: phase === 2 ? 1 : 0,
-            transform: phase === 2 ? 'translateY(0)' : 'translateY(-20px)',
-            pointerEvents: phase === 2 ? 'all' : 'none'
-          }}
-        >
-          <span className="spread-sub">The Ultimate</span>
-          <h1 className="spread-title">COLLECTIONS</h1>
-        </div>
-
-        {/* Return to Stack Button when in Phase 2 */}
+        {/* Return to Spread Arc Button when in Phase 2 */}
         {phase === 2 && (
           <button
             className="return-to-stack-btn"
             onClick={() => setPhase(1)}
           >
-            <span>↑</span> Stack View
+            <span>↑</span> Spread Arc
           </button>
         )}
 
@@ -444,7 +461,7 @@ export default function App() {
         {phase === 3 && (
           <button
             className="back-btn"
-            onClick={() => setPhase(2)}
+            onClick={() => setPhase(1)}
           >
             <span className="back-arrow">←</span> Back to Collections
           </button>
@@ -459,7 +476,7 @@ export default function App() {
             if (autoCycleTimerRef.current) clearInterval(autoCycleTimerRef.current);
           }}
           onMouseLeave={() => {
-            if (phase === 1) {
+            if (phase === 2) {
               autoCycleTimerRef.current = setInterval(() => {
                 setActiveCardIndex((prev) => (prev + 1) % PRODUCTS.length);
               }, 4500);
@@ -504,8 +521,17 @@ export default function App() {
           ))}
         </div>
 
-        {/* PHASE 1 CONTROLS: Pagination dots & Cycle Buttons */}
+        {/* PHASE 1 HINT TEXT: "Click a card to view details" */}
         {phase === 1 && (
+          <div className="phase-2-hint">
+            <span className="hint-sparkle">✦</span>
+            <span>Click a card to view details</span>
+            <span className="hint-sparkle">✦</span>
+          </div>
+        )}
+
+        {/* PHASE 2 CONTROLS: Pagination dots & Cycle Buttons */}
+        {phase === 2 && (
           <div className="phase-1-controls">
             <div className="pagination-bar" role="tablist">
               {PRODUCTS.map((_, idx) => (
@@ -541,20 +567,11 @@ export default function App() {
 
             <button
               className="phase-1-cta-btn"
-              onClick={() => setPhase(2)}
+              onClick={() => setPhase(1)}
             >
-              <span>Explore All 7 Pieces</span>
-              <span className="arrow-icon">↓</span>
+              <span>Back to Spread Arc</span>
+              <span className="arrow-icon">↑</span>
             </button>
-          </div>
-        )}
-
-        {/* PHASE 2 HINT TEXT: "Click a card to view details" */}
-        {phase === 2 && (
-          <div className="phase-2-hint">
-            <span className="hint-sparkle">✦</span>
-            <span>Click a card to view details</span>
-            <span className="hint-sparkle">✦</span>
           </div>
         )}
 
